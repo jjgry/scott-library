@@ -6,6 +6,10 @@ export const Book = () => {
   return (
     <div className="book">
       <p>Book {bookId} Page</p>
+      <img
+        src={`https://covers.openlibrary.org/b/isbn/${bookId}-M.jpg`}
+        alt="Cover"
+      />
     </div>
   );
 };
