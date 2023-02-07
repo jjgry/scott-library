@@ -1,0 +1,19 @@
+.books {
+  height: 100vh;
+
+  .p-tag {
+    margin-right: 0.5em;
+  }
+
+  span.location-edinburgh {
+    background-color: red;
+  }
+
+  span.location-newcastle {
+    background-color: green;
+  }
+
+  span.location-bristol {
+    background-color: purple;
+  }
+}
