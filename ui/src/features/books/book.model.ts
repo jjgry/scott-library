@@ -5,3 +5,11 @@ export type Book = {
   authors: string[];
   locations: string[];
 };
+
+export const newBook = (): Book => ({
+  id: "",
+  title: "",
+  isbn: "",
+  authors: [],
+  locations: [],
+});
