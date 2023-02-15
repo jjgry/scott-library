@@ -25,6 +25,7 @@ export const Books = () => {
     <>
       {rowdata.locations?.map((location) => (
         <Tag
+          key={location}
           className={`location-${location.toLocaleLowerCase()}`}
           value={location}
         />

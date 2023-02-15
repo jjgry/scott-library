@@ -6,16 +6,20 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 @Entity
+@Data
 public class Book {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
   public UUID id;
 
-  @Getter
-  @Setter
   public String title;
+
+  public String isbn;
+
+  public String[] locations;
+
+  public String[] authors;
 }
