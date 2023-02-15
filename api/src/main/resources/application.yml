@@ -1,0 +1,9 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update # TODO: Change this. Investigate proper database migrations
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    url: "jdbc:postgresql://172.23.112.1:5432/librarydb"
+    username: postgres
+    password: password
