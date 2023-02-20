@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { httpGet, httpPut } from "../../shared/util/http";
+import { useCallback, useEffect, useState } from "react";
+import { httpDelete, httpGet, httpPut } from "../../shared/util/http";
 import { Book, newBook } from "./book.model";
 
 export const useBooks = () => {
@@ -47,35 +47,43 @@ export const useBook = (id: string) => {
 
   const getBook = async (id: string) => await httpGet<Book>(`/books/${id}`);
 
-  const updateBook = async (book: Book) =>
-    await httpPut(`/books/${book.id}`, book);
+  const updateBook = async (book: Book) => {
+    await httpPut(`/books/${id}`, book);
+    await fetchData();
+  };
+
+  const deleteBook = async () => {
+    await httpDelete<Book>(`/books/${book.id}`);
+    await fetchData();
+  };
+
+  const fetchData = useCallback(async () => {
+    setBookLoading(true);
+    getBook(id)
+      .then((response) => {
+        setBook(response);
+      })
+      .catch(() => {
+        setBook(newBook());
+      })
+      .finally(() => {
+        setBookLoading(false);
+      });
+  }, [id]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      setBookLoading(true);
-      getBook(id)
-        .then((response) => {
-          setBook(response);
-        })
-        .catch(() => {
-          setBook(newBook());
-        })
-        .finally(() => {
-          setBookLoading(false);
-        });
-    };
-
     if (id) {
       fetchData();
     } else {
       clearBook();
     }
-  }, [id]);
+  }, [id, fetchData]);
 
   return {
     book,
     bookLoading,
     clearBook,
     updateBook,
+    deleteBook,
   };
 };

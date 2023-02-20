@@ -1,4 +1,5 @@
 import { Field, Form } from "react-final-form";
+import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { Chips } from "primereact/chips";
@@ -9,14 +10,23 @@ import "./book.scss";
 type BookFormProps = {
   id: string;
   visible: boolean;
-  setVisible: any;
+  setVisible: (visible: boolean) => void;
 };
 
 export const BookForm = ({ id, visible, setVisible }: BookFormProps) => {
-  const { book, updateBook } = useBook(id);
+  const { book, updateBook, deleteBook } = useBook(id);
 
   const onSubmit = async (book: Book) => {
     await updateBook(book);
+  };
+
+  const onCancel = () => {
+    setVisible(false);
+  };
+
+  const onDelete = async () => {
+    await deleteBook();
+    setVisible(false);
   };
 
   return (
@@ -67,7 +77,21 @@ export const BookForm = ({ id, visible, setVisible }: BookFormProps) => {
                 </div>
               )}
             </Field>
-            <button type="submit">Submit</button>
+            <div className="button-group">
+              <Button
+                className="p-button-danger"
+                label="Delete"
+                icon="pi pi-trash"
+                onClick={onDelete}
+              />
+              <Button
+                className="p-button-secondary"
+                label="Cancel"
+                icon="pi pi-times"
+                onClick={onCancel}
+              />
+              <Button type="submit" label="Save" icon="pi pi-check" />
+            </div>
           </form>
         )}
       />
