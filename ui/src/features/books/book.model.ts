@@ -4,6 +4,8 @@ export type Book = {
   isbn: string;
   authors: string[];
   locations: string[];
+  borrower: string | null;
+  loanedAt: string | null;
 };
 
 export const newBook = (): Book => ({
@@ -12,4 +14,6 @@ export const newBook = (): Book => ({
   isbn: "",
   authors: [],
   locations: [],
+  borrower: null,
+  loanedAt: null,
 });

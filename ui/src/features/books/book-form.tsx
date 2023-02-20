@@ -83,6 +83,14 @@ export const BookForm = ({ id, visible, setVisible, refreshBooks }: BookFormProp
                 </div>
               )}
             </Field>
+            <Field name="borrower">
+              {({ input }) => (
+                <div className="field">
+                  <label htmlFor="borrower">Borrower</label>
+                  <InputText {...input} id="borrower" />
+                </div>
+              )}
+            </Field>
             <div className="button-group">
               <Button
                 className="p-button-danger"

@@ -24,7 +24,7 @@ public class Book {
 
   public String[] authors;
   
-  public String loanUserName;
+  public String borrower;
 
-  public Instant loanTime;
+  public Instant loanedAt;
 }

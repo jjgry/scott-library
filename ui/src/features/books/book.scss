@@ -5,16 +5,42 @@
     margin-right: 0.5em;
   }
 
-  span.location-edinburgh {
+  .logo {
+    font-size: 25px;
+  }
+
+  .location-edinburgh {
     background-color: red;
   }
 
-  span.location-newcastle {
+  .location-newcastle {
     background-color: green;
   }
 
-  span.location-bristol {
+  .location-bristol {
     background-color: purple;
+  }
+
+  i {
+    margin-right: 10px;
+
+    &.pi-check {
+      color: green;
+    }
+
+    &.pi-times {
+      color: red;
+    }
+  }
+
+  .p-datatable-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .p-float-label {
+    margin-top: 10px;
   }
 }
 

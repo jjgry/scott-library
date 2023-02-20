@@ -6,14 +6,24 @@ import {
 import { Column, ColumnFilterElementTemplateOptions } from "primereact/column";
 import { Tag } from "primereact/tag";
 import { Dropdown } from "primereact/dropdown";
+import { MultiSelect, MultiSelectChangeEvent } from "primereact/multiselect";
 import { useBooks } from "./book.service";
 import { Book } from "./book.model";
-import "./book.scss";
 import { useState } from "react";
 import { BookForm } from "./book-form";
+import "./book.scss";
+
+const columns = [
+  { title: "title", header: "Title" },
+  { title: "isbn", header: "ISBN" },
+  { title: "authors", header: "Author(s)" },
+  { title: "locations", header: "Location(s)" },
+  { title: "borrower", header: "Borrower" },
+];
 
 export const Books = () => {
   const { books, refreshBooks } = useBooks();
+  const [visibleColumns, setVisibleColumns] = useState(columns);
   const [formVisible, setFormVisible] = useState(false);
   const [formId, setFormId] = useState("");
 
@@ -27,6 +37,15 @@ export const Books = () => {
     authors: { value: null, matchMode: "contains" },
     locations: { value: null, matchMode: "contains" },
   };
+
+  const handleRowClick = (e: DataTableRowClickEvent) => {
+    const book = e.data as Book;
+    setFormVisible(true);
+    setFormId(book.id);
+  };
+
+  const isColumnHidden = (columnId: string) =>
+    !visibleColumns.map((c) => c.title).includes(columnId);
 
   const authorsBodyTemplate = (rowdata: Book) => rowdata.authors?.join(", ");
 
@@ -42,6 +61,16 @@ export const Books = () => {
     </>
   );
 
+  const onLoanBodyTemplate = (rowdata: Book) => {
+    const isOnLoan = !!rowdata.borrower;
+    return (
+      <div className="on-loan">
+        <i className={`pi ${isOnLoan ? "pi-check" : "pi-times"}`} />
+        {isOnLoan && <span>{rowdata.borrower}</span>}
+      </div>
+    );
+  };
+
   const locationsFilterTemplate = (
     options: ColumnFilterElementTemplateOptions
   ) => (
@@ -55,11 +84,27 @@ export const Books = () => {
     />
   );
 
-  const handleRowClick = (e: DataTableRowClickEvent) => {
-    const book = e.data as Book;
-    setFormVisible(true);
-    setFormId(book.id);
+  const onColumnToggle = (event: MultiSelectChangeEvent) => {
+    const selectedColumns = event.value;
+    console.log(selectedColumns);
+    setVisibleColumns(selectedColumns);
   };
+
+  const headerTemplate = (
+    <>
+      <span className="logo">Scott Library</span>
+      <span className="p-float-label">
+        <MultiSelect
+          value={visibleColumns}
+          options={columns}
+          optionLabel="header"
+          onChange={onColumnToggle}
+          display="chip"
+        />
+        <label htmlFor="ms-columns">Select Columns to Display</label>
+      </span>
+    </>
+  );
 
   return (
     <div className="books">
@@ -73,23 +118,28 @@ export const Books = () => {
         value={books}
         responsiveLayout="scroll"
         filters={filters}
-        filterDisplay="row"
+        header={headerTemplate}
         scrollable
         scrollHeight="flex"
         onRowClick={handleRowClick}
         rowHover
+        reorderableColumns
+        resizableColumns
       >
         <Column
+          // style={{ minWidth: "40%" }}
           field="title"
           header="Title"
           filter
           filterPlaceholder="Search by title"
+          hidden={isColumnHidden("title")}
         />
         <Column
           field="isbn"
           header="ISBN"
           filter
           filterPlaceholder="Search by ISBN"
+          hidden={isColumnHidden("isbn")}
         />
         <Column
           field="authors"
@@ -97,6 +147,7 @@ export const Books = () => {
           body={authorsBodyTemplate}
           filter
           filterPlaceholder="Search by author(s)"
+          hidden={isColumnHidden("authors")}
         />
         <Column
           field="locations"
@@ -104,6 +155,14 @@ export const Books = () => {
           body={locationsBodyTemplate}
           filter
           filterElement={locationsFilterTemplate}
+          hidden={isColumnHidden("locations")}
+        />
+        <Column
+          header="Borrower"
+          filter
+          filterPlaceholder="Search by borrower"
+          body={onLoanBodyTemplate}
+          hidden={isColumnHidden("borrower")}
         />
       </DataTable>
     </div>

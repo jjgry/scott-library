@@ -36,8 +36,8 @@ public class BookService implements ICrudService<Book, UUID> {
   public Book create(Book newBook) {
     newBook.id = UUID.randomUUID();
 
-    if (!newBook.loanUserName.isBlank())
-      newBook.loanTime = Instant.now();
+    if (!newBook.borrower.isBlank())
+      newBook.loanedAt = Instant.now();
 
     Book created = bookRepository.save(newBook);
     return created;
@@ -59,15 +59,15 @@ public class BookService implements ICrudService<Book, UUID> {
     toUpdate.locations = changes.locations;
 
     // New user takes book
-    if (!changes.loanUserName.isBlank() && toUpdate.loanUserName != changes.loanUserName) {
-      toUpdate.loanUserName = changes.loanUserName;
-      toUpdate.loanTime = Instant.now();
+    if (!changes.borrower.isBlank() && toUpdate.borrower != changes.borrower) {
+      toUpdate.borrower = changes.borrower;
+      toUpdate.loanedAt = Instant.now();
     }
 
     // Book is returned to library
-    if (changes.loanUserName.isBlank()) {
-      toUpdate.loanUserName = null;
-      toUpdate.loanTime = null;
+    if (changes.borrower.isBlank()) {
+      toUpdate.borrower = null;
+      toUpdate.loanedAt = null;
     }
 
     var updated = bookRepository.saveAndFlush(existing.get());
