@@ -25,6 +25,7 @@ export const BookForm = ({ id, visible, setVisible }: BookFormProps) => {
       visible={visible}
       style={{ width: "50vw" }}
       onHide={() => setVisible(false)}
+      dismissableMask
     >
       <Form
         onSubmit={onSubmit}
