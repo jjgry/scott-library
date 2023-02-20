@@ -1,10 +1,10 @@
 import { Field, Form } from "react-final-form";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
-import "./book.scss";
 import { Chips } from "primereact/chips";
 import { useBook } from "./book.service";
 import { Book } from "./book.model";
+import "./book.scss";
 
 type BookFormProps = {
   id: string;
@@ -13,12 +13,11 @@ type BookFormProps = {
 };
 
 export const BookForm = ({ id, visible, setVisible }: BookFormProps) => {
-  const { book } = useBook(id);
+  const { book, updateBook } = useBook(id);
 
-  const doUpdateBookApiCall = (book: Book) => {
-    // TODO: Complete this
-    console.log(book);
-  }
+  const onSubmit = async (book: Book) => {
+    await updateBook(book);
+  };
 
   return (
     <Dialog
@@ -28,16 +27,16 @@ export const BookForm = ({ id, visible, setVisible }: BookFormProps) => {
       onHide={() => setVisible(false)}
     >
       <Form
-        onSubmit={doUpdateBookApiCall}
+        onSubmit={onSubmit}
         validate={(values) => {
           return {}; // TODO: Add some validation
         }}
         initialValues={book}
         render={({ handleSubmit }) => (
-          <form onSubmit={handleSubmit}>
+          <form className="book-form" onSubmit={handleSubmit}>
             <Field name="title">
               {({ input }) => (
-                <div className="title">
+                <div className="field">
                   <label htmlFor="title">Title</label>
                   <InputText {...input} id="title" />
                 </div>

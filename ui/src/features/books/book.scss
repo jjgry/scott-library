@@ -17,3 +17,21 @@
     background-color: purple;
   }
 }
+
+.book-form {
+  label {
+    width: 80px;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+  }
+
+  .p-inputtext,
+  .p-chips {
+    flex-grow: 1;
+    min-width: 0;
+  }
+}

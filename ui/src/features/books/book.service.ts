@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { httpGet, httpPut } from "../../shared/util/http";
 import { Book, newBook } from "./book.model";
 
 export const useBooks = () => {
@@ -9,10 +10,7 @@ export const useBooks = () => {
     setBooks([]);
   };
 
-  const getBooks = async (): Promise<Book[]> => {
-    const response = await fetch("http://localhost:8080/books");
-    return (await response.json()) as Book[];
-  };
+  const getBooks = async () => await httpGet<Book[]>("/books");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -47,10 +45,10 @@ export const useBook = (id: string) => {
     setBook(newBook());
   };
 
-  const getBook = async (id: string): Promise<Book> => {
-    const response = await fetch(`http://localhost:8080/books/${id}`);
-    return (await response.json()) as Book;
-  };
+  const getBook = async (id: string) => await httpGet<Book>(`/books/${id}`);
+
+  const updateBook = async (book: Book) =>
+    await httpPut(`/books/${book.id}`, book);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -78,5 +76,6 @@ export const useBook = (id: string) => {
     book,
     bookLoading,
     clearBook,
+    updateBook,
   };
 };
