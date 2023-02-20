@@ -1,4 +1,8 @@
-import { DataTable, DataTableFilterMeta } from "primereact/datatable";
+import {
+  DataTable,
+  DataTableFilterMeta,
+  DataTableRowClickEvent,
+} from "primereact/datatable";
 import { Column, ColumnFilterElementTemplateOptions } from "primereact/column";
 import { Tag } from "primereact/tag";
 import { Dropdown } from "primereact/dropdown";
@@ -9,7 +13,7 @@ import { useState } from "react";
 import { BookForm } from "./book-form";
 
 export const Books = () => {
-  const { books } = useBooks();
+  const { books, refreshBooks } = useBooks();
   const [formVisible, setFormVisible] = useState(false);
   const [formId, setFormId] = useState("");
 
@@ -51,22 +55,28 @@ export const Books = () => {
     />
   );
 
-  const handleRowClick = (entity: Book) => {
+  const handleRowClick = (e: DataTableRowClickEvent) => {
+    const book = e.data as Book;
     setFormVisible(true);
-    setFormId(entity.id);
+    setFormId(book.id);
   };
 
   return (
     <div className="books">
-      <BookForm id={formId} visible={formVisible} setVisible={setFormVisible} />
+      <BookForm
+        id={formId}
+        visible={formVisible}
+        setVisible={setFormVisible}
+        refreshBooks={refreshBooks}
+      />
       <DataTable
         value={books}
         responsiveLayout="scroll"
         filters={filters}
         filterDisplay="row"
-        scrollable 
+        scrollable
         scrollHeight="flex"
-        onRowClick={e => handleRowClick(e.data as Book)}
+        onRowClick={handleRowClick}
         rowHover
       >
         <Column

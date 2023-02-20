@@ -12,13 +12,15 @@ type BookFormProps = {
   id: string;
   visible: boolean;
   setVisible: (visible: boolean) => void;
+  refreshBooks: () => void;
 };
 
-export const BookForm = ({ id, visible, setVisible }: BookFormProps) => {
+export const BookForm = ({ id, visible, setVisible, refreshBooks }: BookFormProps) => {
   const { book, updateBook, deleteBook } = useBook(id);
 
   const onSubmit = async (book: Book) => {
     await updateBook(book);
+    refreshBooks();
   };
 
   const onCancel: MouseEventHandler = (e) => {
@@ -29,6 +31,7 @@ export const BookForm = ({ id, visible, setVisible }: BookFormProps) => {
   const onDelete: MouseEventHandler = async (e) => {
     e.preventDefault();
     await deleteBook();
+    refreshBooks();
     setVisible(false);
   };
 

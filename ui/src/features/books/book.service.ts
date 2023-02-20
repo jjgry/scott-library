@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { httpDelete, httpGet, httpPut } from "../../shared/util/http";
 import { Book, newBook } from "./book.model";
 
@@ -12,28 +12,31 @@ export const useBooks = () => {
 
   const getBooks = async () => await httpGet<Book[]>("/books");
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setBooksLoading(true);
-      getBooks()
-        .then((response) => {
-          setBooks(response);
-        })
-        .catch(() => {
-          setBooks([]);
-        })
-        .finally(() => {
-          setBooksLoading(false);
-        });
-    };
-
-    fetchData();
+  const fetchData = useCallback(async () => {
+    setBooksLoading(true);
+    getBooks()
+      .then((response) => {
+        setBooks(response);
+      })
+      .catch(() => {
+        setBooks([]);
+      })
+      .finally(() => {
+        setBooksLoading(false);
+      });
   }, []);
+
+  const refreshBooks = () => fetchData();
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   return {
     books,
     booksLoading,
     clearBooks,
+    refreshBooks,
   };
 };
 
