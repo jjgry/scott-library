@@ -1,5 +1,6 @@
 package com.scottlogic.library.Services;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,6 +35,10 @@ public class BookService implements ICrudService<Book, UUID> {
   @Override
   public Book create(Book newBook) {
     newBook.id = UUID.randomUUID();
+
+    if (!newBook.loanUserName.isBlank())
+      newBook.loanTime = Instant.now();
+
     Book created = bookRepository.save(newBook);
     return created;
   }
@@ -52,6 +57,18 @@ public class BookService implements ICrudService<Book, UUID> {
     toUpdate.isbn = changes.isbn;
     toUpdate.authors = changes.authors;
     toUpdate.locations = changes.locations;
+
+    // New user takes book
+    if (!changes.loanUserName.isBlank() && toUpdate.loanUserName != changes.loanUserName) {
+      toUpdate.loanUserName = changes.loanUserName;
+      toUpdate.loanTime = Instant.now();
+    }
+
+    // Book is returned to library
+    if (changes.loanUserName.isBlank()) {
+      toUpdate.loanUserName = null;
+      toUpdate.loanTime = null;
+    }
 
     var updated = bookRepository.saveAndFlush(existing.get());
     return updated;

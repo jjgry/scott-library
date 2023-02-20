@@ -1,5 +1,6 @@
 package com.scottlogic.library.models;
 
+import java.time.Instant;
 import java.util.UUID;
 
 import jakarta.persistence.Entity;
@@ -22,4 +23,8 @@ public class Book {
   public String[] locations;
 
   public String[] authors;
+  
+  public String loanUserName;
+
+  public Instant loanTime;
 }
