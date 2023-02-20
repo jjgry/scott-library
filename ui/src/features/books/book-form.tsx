@@ -6,6 +6,7 @@ import { Chips } from "primereact/chips";
 import { useBook } from "./book.service";
 import { Book } from "./book.model";
 import "./book.scss";
+import { MouseEventHandler } from "react";
 
 type BookFormProps = {
   id: string;
@@ -20,11 +21,13 @@ export const BookForm = ({ id, visible, setVisible }: BookFormProps) => {
     await updateBook(book);
   };
 
-  const onCancel = () => {
+  const onCancel: MouseEventHandler = (e) => {
+    e.preventDefault();
     setVisible(false);
   };
 
-  const onDelete = async () => {
+  const onDelete: MouseEventHandler = async (e) => {
+    e.preventDefault();
     await deleteBook();
     setVisible(false);
   };
