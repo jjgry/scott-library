@@ -36,6 +36,7 @@ export const Books = () => {
     isbn: { value: null, matchMode: "startsWith" },
     authors: { value: null, matchMode: "contains" },
     locations: { value: null, matchMode: "contains" },
+    borrower: { value: null, matchMode: "contains" },
   };
 
   const handleRowClick = (e: DataTableRowClickEvent) => {
@@ -61,12 +62,12 @@ export const Books = () => {
     </>
   );
 
-  const onLoanBodyTemplate = (rowdata: Book) => {
-    const isOnLoan = !!rowdata.borrower;
+  const borrowerBodyTemplate = (rowdata: Book) => {
+    const isBorrowed = !!rowdata.borrower;
     return (
       <div className="on-loan">
-        <i className={`pi ${isOnLoan ? "pi-check" : "pi-times"}`} />
-        {isOnLoan && <span>{rowdata.borrower}</span>}
+        <i className={`pi ${isBorrowed ? "pi-check" : "pi-times"}`} />
+        {isBorrowed && <span>{rowdata.borrower}</span>}
       </div>
     );
   };
@@ -84,11 +85,8 @@ export const Books = () => {
     />
   );
 
-  const onColumnToggle = (event: MultiSelectChangeEvent) => {
-    const selectedColumns = event.value;
-    console.log(selectedColumns);
-    setVisibleColumns(selectedColumns);
-  };
+  const onColumnToggle = (event: MultiSelectChangeEvent) =>
+    setVisibleColumns(event.value);
 
   const headerTemplate = (
     <>
@@ -125,14 +123,16 @@ export const Books = () => {
         rowHover
         reorderableColumns
         resizableColumns
+        filterDisplay="row" // TODO: Investigate why "menu" causes filter to break
       >
         <Column
-          // style={{ minWidth: "40%" }}
+          style={{ minWidth: "30%" }}
           field="title"
           header="Title"
           filter
           filterPlaceholder="Search by title"
           hidden={isColumnHidden("title")}
+          bodyStyle={{ whiteSpace: "pre-wrap" }}
         />
         <Column
           field="isbn"
@@ -158,10 +158,11 @@ export const Books = () => {
           hidden={isColumnHidden("locations")}
         />
         <Column
+          field="borrower"
           header="Borrower"
           filter
           filterPlaceholder="Search by borrower"
-          body={onLoanBodyTemplate}
+          body={borrowerBodyTemplate}
           hidden={isColumnHidden("borrower")}
         />
       </DataTable>
