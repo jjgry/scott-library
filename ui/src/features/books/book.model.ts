@@ -1,5 +1,6 @@
 export type Book = {
   id: string;
+  tag: string;
   title: string;
   isbn: string;
   authors: string[];
@@ -10,6 +11,7 @@ export type Book = {
 
 export const newBook = (): Book => ({
   id: "",
+  tag: "",
   title: "",
   isbn: "",
   authors: [],

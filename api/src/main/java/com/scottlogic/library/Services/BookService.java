@@ -53,6 +53,7 @@ public class BookService implements ICrudService<Book, UUID> {
 
     var toUpdate = existing.get();
 
+    toUpdate.tag = changes.tag;
     toUpdate.title = changes.title;
     toUpdate.isbn = changes.isbn;
     toUpdate.authors = changes.authors;

@@ -16,6 +16,8 @@ public class Book {
   @GeneratedValue(strategy = GenerationType.UUID)
   public UUID id;
 
+  public String tag;
+
   public String title;
 
   public String isbn;

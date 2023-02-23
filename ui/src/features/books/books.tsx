@@ -14,6 +14,7 @@ import { BookForm } from "./book-form";
 import "./book.scss";
 
 const columns = [
+  { title: "tag", header: "Tag" },
   { title: "title", header: "Title" },
   { title: "isbn", header: "ISBN" },
   { title: "authors", header: "Author(s)" },
@@ -126,11 +127,21 @@ export const Books = () => {
         filterDisplay="row" // TODO: Investigate why "menu" causes filter to break
       >
         <Column
+          style={{ maxWidth: "10%" }}
+          field="tag"
+          header="Tag"
+          sortable
+          filter
+          filterPlaceholder="Search by tag"
+          hidden={isColumnHidden("tag")}
+        />
+        <Column
           style={{ minWidth: "30%" }}
           field="title"
           header="Title"
           filter
           filterPlaceholder="Search by title"
+          sortable
           hidden={isColumnHidden("title")}
           bodyStyle={{ whiteSpace: "pre-wrap" }}
         />
@@ -153,6 +164,7 @@ export const Books = () => {
           field="locations"
           header="Location(s)"
           body={locationsBodyTemplate}
+          sortable
           filter
           filterElement={locationsFilterTemplate}
           hidden={isColumnHidden("locations")}
@@ -160,6 +172,7 @@ export const Books = () => {
         <Column
           field="borrower"
           header="Borrower"
+          sortable
           filter
           filterPlaceholder="Search by borrower"
           body={borrowerBodyTemplate}
