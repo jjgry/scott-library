@@ -59,13 +59,13 @@ public class BookService implements ICrudService<Book, UUID> {
     toUpdate.locations = changes.locations;
 
     // New user takes book
-    if (!changes.borrower.isBlank() && toUpdate.borrower != changes.borrower) {
+    if (changes.borrower != null && !changes.borrower.isBlank() && toUpdate.borrower != changes.borrower) {
       toUpdate.borrower = changes.borrower;
       toUpdate.loanedAt = Instant.now();
     }
 
     // Book is returned to library
-    if (changes.borrower.isBlank()) {
+    if (changes.borrower == null || changes.borrower.isBlank()) {
       toUpdate.borrower = null;
       toUpdate.loanedAt = null;
     }
